@@ -1,0 +1,10 @@
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/products/*
+  Cache-Control: public, max-age=604800
+
+/admin/*
+  Cache-Control: no-cache
+  X-Robots-Tag: noindex
+  X-Frame-Options: DENY

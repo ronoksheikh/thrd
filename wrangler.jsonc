@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "thread-house",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none",
+    // The homepage goes through the Worker (pixel config + server-side PageView);
+    // all other static files (JS, CSS, fonts, images, /admin/) are served directly from the edge.
+    "run_worker_first": ["/", "/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thread-house",
+      // ← paste the id printed by: npx wrangler d1 create thread-house
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    // Your Meta Pixel ID (Events Manager → Data sources). Leave empty to disable tracking.
+    "META_PIXEL_ID": ""
+  }
+  // Secrets (never commit these):
+  //   npx wrangler secret put ADMIN_PASSWORD
+  //   npx wrangler secret put META_CAPI_TOKEN
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>THREAD HOUSE — প্রিমিয়াম সোয়েটশার্ট | ৩টি মাত্র ১৭০০ টাকা</title>
+    <meta name="description" content="থ্রেড হাউস প্রিমিয়াম সোয়েটশার্ট। ৩টি ১৭০০ টাকা, ২টি ১৩০০ টাকা — ডেলিভারি চার্জ একদম ফ্রি। ক্যাশ অন ডেলিভারি, সারা বাংলাদেশে।" />
+    <meta name="theme-color" content="#d81b60" />
+    <meta property="og:type" content="product" />
+    <meta property="og:title" content="THREAD HOUSE — প্রিমিয়াম সোয়েটশার্ট" />
+    <meta property="og:description" content="৩টি ১৭০০ টাকা, ২টি ১৩০০ টাকা — ডেলিভারি চার্জ একদম ফ্রি!" />
+    <meta property="og:image" content="/products/black.svg" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <!--app-head-->
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/store/main.tsx"></script>
+    <script>
+      // Meta Pixel — loaded after the page is fully interactive so it never slows the first paint.
+      // window.__TH = { p: pixelId, e: PageView eventId } is injected by the Worker (same eventId is sent via CAPI).
+      (function () {
+        var c = window.__TH || {};
+        if (!c.p) return;
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+          if (!f._fbq) f._fbq = n;
+          n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+        })(window, document);
+        fbq('init', c.p);
+        fbq('track', 'PageView', {}, { eventID: c.e });
+        function load() {
+          var t = document.createElement('script');
+          t.async = true;
+          t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+          document.head.appendChild(t);
+        }
+        function idle() { (window.requestIdleCallback || setTimeout)(load, { timeout: 2500 }); }
+        document.readyState === 'complete' ? idle() : addEventListener('load', idle);
+      })();
+    </script>
+  </body>
+</html>

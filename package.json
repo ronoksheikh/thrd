@@ -1,0 +1,36 @@
+{
+  "name": "thread-house",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "wrangler dev --port 8787",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.worker.json && vite build && vite build --ssr src/store/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "preview": "npm run build && wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply thread-house --local",
+    "db:migrate:remote": "wrangler d1 migrations apply thread-house --remote",
+    "deploy": "npm run build && wrangler d1 migrations apply thread-house --remote && wrangler deploy",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.worker.json"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/anek-bangla": "^5.3.0",
+    "@mui/material": "^9.5.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261015.1",
+    "@emotion/server": "^11.11.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "wrangler": "^4.151.0"
+  }
+}
