@@ -246,7 +246,7 @@ export default function App() {
                                 outline: on ? '2px solid' : '2px solid transparent',
                                 outlineColor: on ? 'primary.main' : 'transparent',
                                 outlineOffset: 3,
-                                color: ['white', 'cream'].includes(c.id) ? '#000' : '#fff',
+                                color: c.border ? '#000' : '#fff',
                                 transition: 'outline-color .2s',
                               }}
                             >

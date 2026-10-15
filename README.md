@@ -12,7 +12,7 @@ A one-product sweatshirt store (fully in Bangla) that runs entirely on **Cloudfl
 
 Everything is in **`src/shared/product.ts`**: colours, sizes, combo prices, the delivery charge (`DELIVERY_CHARGE`, now ৳100 for single pieces) and photos.
 
-Product photos go in `public/products/`. The current images are placeholder SVGs. Replace them with real photos (square `.webp`, about 1000px) and update `IMAGES`. A photo with a `color` set is shown automatically when the customer picks that colour. Also replace `og:image` in `index.html` with a real JPG so Facebook link previews work.
+Product photos go in `public/products/`. Each colour has `<id>.webp` (800×960) and `<id>-thumb.webp` (160×192); the gallery is built from `COLORS` automatically. A photo with a `color` set is shown automatically when the customer picks that colour. `public/og.jpg` is the Facebook link-preview image.
 
 ## First-time deploy
 

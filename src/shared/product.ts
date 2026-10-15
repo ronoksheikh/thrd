@@ -14,24 +14,26 @@ export type Color = { id: string; name: string; hex: string; border?: boolean };
 
 // Edit freely. `id` is saved in orders, `name` is what customers see.
 export const COLORS: Color[] = [
-  { id: 'black', name: 'কালো', hex: '#1c1c1c' },
-  { id: 'white', name: 'সাদা', hex: '#fafafa', border: true },
-  { id: 'orange', name: 'কমলা', hex: '#f57c00' },
-  { id: 'cream', name: 'অফ-হোয়াইট', hex: '#efe7da', border: true },
+  { id: 'black', name: 'কালো', hex: '#1d1e1e' },
+  { id: 'white', name: 'সাদা', hex: '#f4f3f6', border: true },
+  { id: 'orange', name: 'কমলা', hex: '#f26617' },
+  { id: 'red', name: 'মেরুন', hex: '#820917' },
+  { id: 'blue', name: 'নীল', hex: '#0a3d8f' },
+  { id: 'cream', name: 'অফ-হোয়াইট', hex: '#e8d2b6', border: true },
 ];
 
 export const SIZES = ['M', 'L', 'XL', 'XXL'] as const;
 export type Size = (typeof SIZES)[number];
 
-// Product photos, shown in this order. Replace the placeholder SVGs in
-// /public/products with real photos (webp recommended, ~1000px wide, square).
+// Product photos, shown in this order (800×960 webp + 160×192 thumbnail in /public/products).
 // `color` links a photo to a colour: picking that colour scrolls the gallery to it.
-export const IMAGES: { src: string; alt: string; color?: string }[] = [
-  { src: '/products/black.svg', alt: 'কালো সোয়েটশার্ট', color: 'black' },
-  { src: '/products/white.svg', alt: 'সাদা সোয়েটশার্ট', color: 'white' },
-  { src: '/products/orange.svg', alt: 'কমলা সোয়েটশার্ট', color: 'orange' },
-  { src: '/products/cream.svg', alt: 'অফ-হোয়াইট সোয়েটশার্ট', color: 'cream' },
-];
+export const IMAGE_SIZE = { width: 800, height: 960 };
+export const IMAGES: { src: string; thumb: string; alt: string; color?: string }[] = COLORS.map((c) => ({
+  src: `/products/${c.id}.webp`,
+  thumb: `/products/${c.id}-thumb.webp`,
+  alt: `${c.name} সোয়েটশার্ট`,
+  color: c.id,
+}));
 
 export type Combo = { qty: 1 | 2 | 3; price: number; freeDelivery: boolean; label: string; badge?: string };
 

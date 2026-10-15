@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import { IMAGES } from '../shared/product';
+import { IMAGES, IMAGE_SIZE } from '../shared/product';
 
 export type GalleryHandle = { showColor: (colorId: string) => void };
 
@@ -24,7 +24,7 @@ const Gallery = forwardRef<GalleryHandle>(function Gallery(_, ref) {
 
   return (
     <Box>
-      <Box sx={{ position: 'relative', borderRadius: 3, overflow: 'hidden', bgcolor: '#fdf1f4' }}>
+      <Box sx={{ position: 'relative', borderRadius: 3, overflow: 'hidden', bgcolor: '#f6f6f4' }}>
         <Box
           ref={track}
           onScroll={(e) => {
@@ -45,13 +45,13 @@ const Gallery = forwardRef<GalleryHandle>(function Gallery(_, ref) {
               component="img"
               src={img.src}
               alt={img.alt}
-              width={800}
-              height={800}
+              width={IMAGE_SIZE.width}
+              height={IMAGE_SIZE.height}
               loading={i === 0 ? 'eager' : 'lazy'}
               fetchPriority={i === 0 ? 'high' : 'auto'}
               decoding="async"
               draggable={false}
-              sx={{ flex: '0 0 100%', width: '100%', height: 'auto', aspectRatio: '1', objectFit: 'cover', scrollSnapAlign: 'start' }}
+              sx={{ flex: '0 0 100%', width: '100%', height: 'auto', aspectRatio: `${IMAGE_SIZE.width} / ${IMAGE_SIZE.height}`, objectFit: 'cover', scrollSnapAlign: 'start' }}
             />
           ))}
         </Box>
@@ -71,24 +71,23 @@ const Gallery = forwardRef<GalleryHandle>(function Gallery(_, ref) {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 1, mt: 1, overflowX: 'auto', scrollbarWidth: 'none' }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: `repeat(${IMAGES.length}, 1fr)`, gap: 1, mt: 1 }}>
         {IMAGES.map((img, i) => (
           <ButtonBase
             key={img.src}
             onClick={() => go(i)}
             aria-label={img.alt}
             sx={{
-              flex: '0 0 64px',
-              height: 64,
+              aspectRatio: `${IMAGE_SIZE.width} / ${IMAGE_SIZE.height}`,
               borderRadius: 2,
               overflow: 'hidden',
               border: 2,
               borderColor: i === active ? 'primary.main' : 'transparent',
-              bgcolor: '#fdf1f4',
+              bgcolor: '#f6f6f4',
               transition: 'border-color .2s',
             }}
           >
-            <img src={img.src} alt="" width={64} height={64} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={img.thumb} alt="" width={64} height={77} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </ButtonBase>
         ))}
       </Box>
