@@ -4,6 +4,9 @@
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
   "observability": { "enabled": true },
+  "routes": [
+    { "pattern": "thbd.store", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -18,13 +21,13 @@
       "binding": "DB",
       "database_name": "thread-house",
       // ← paste the id printed by: npx wrangler d1 create thread-house
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "46358ede-0018-49be-abeb-a98172d5aa9a",
       "migrations_dir": "migrations"
     }
   ],
   "vars": {
     // Your Meta Pixel ID (Events Manager → Data sources). Leave empty to disable tracking.
-    "META_PIXEL_ID": ""
+    "META_PIXEL_ID": "1087891547542252"
   }
   // Secrets (never commit these):
   //   npx wrangler secret put ADMIN_PASSWORD
