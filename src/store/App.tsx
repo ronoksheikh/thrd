@@ -148,7 +148,27 @@ export default function App() {
               <Typography component="h1" sx={{ fontSize: 26, fontWeight: 700, lineHeight: 1.25 }}>
                 {PRODUCT.name}
               </Typography>
-              <Typography color="text.secondary" sx={{ mt: 0.5 }}>
+              <Box
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'baseline',
+                  gap: 0.75,
+                  mt: 1,
+                  px: 1.25,
+                  py: 0.5,
+                  borderRadius: 2,
+                  bgcolor: 'primary.main',
+                  color: '#fff',
+                }}
+              >
+                <Box component="span" sx={{ fontWeight: 700, fontSize: 18 }}>
+                  {PRODUCT.gsm}
+                </Box>
+                <Box component="span" sx={{ fontSize: 14 }}>
+                  মোটা প্রিমিয়াম ফ্যাব্রিক
+                </Box>
+              </Box>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>
                 {PRODUCT.tagline}
               </Typography>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 1.5 }}>

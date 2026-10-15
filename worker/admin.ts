@@ -1,6 +1,6 @@
 import { json, type Env } from './env';
 import { sha256 } from './meta';
-import { isStatus, type AdminOrder } from '../src/shared/status';
+import { isStatus, statusInfo, type AdminOrder } from '../src/shared/status';
 import { orderNo } from '../src/shared/bn';
 import { colorById } from '../src/shared/product';
 
@@ -140,23 +140,33 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
     });
   }
 
-  // CSV export (for courier bulk upload / Excel)
+  // CSV export with every detail. ?all=1 → every order (ignores the current filter/search).
   if (path === '/export' && req.method === 'GET') {
-    const { where, args } = filters(url);
+    const { where, args } = url.searchParams.get('all') === '1' ? { where: [], args: [] } : filters(url);
     const { results } = await env.DB.prepare(
-      `SELECT ${COLS} FROM orders ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY id DESC LIMIT 5000`,
+      `SELECT ${COLS}, source_url, ip FROM orders ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY id DESC`,
     )
       .bind(...args)
-      .all<Row>();
+      .all<Row & { source_url: string | null; ip: string | null }>();
     const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const lines = [['Order', 'Date', 'Name', 'Phone', 'Address', 'Qty', 'Items', 'Total (COD)', 'Status', 'Note'].join(',')];
+    const header = [
+      'Order No', 'Date (Dhaka)', 'Name', 'Phone', 'Address', 'Pieces',
+      'Item 1 Colour', 'Item 1 Size', 'Item 2 Colour', 'Item 2 Size', 'Item 3 Colour', 'Item 3 Size',
+      'Items', 'Subtotal', 'Delivery Charge', 'Total (COD)', 'Status', 'Note', 'Meta CAPI', 'Page URL', 'IP',
+    ];
+    const lines = [header.map(esc).join(',')];
     for (const r of results) {
       const o = toOrder(r);
-      const items = o.items.map((it) => `${colorById(it.color)?.name ?? it.color}-${it.size}`).join(' | ');
+      const cname = (id: string) => colorById(id)?.name ?? id;
+      const perItem = [0, 1, 2].flatMap((i) => (o.items[i] ? [cname(o.items[i].color), o.items[i].size] : ['', '']));
+      const items = o.items.map((it) => `${cname(it.color)}-${it.size}`).join(' | ');
       const date = new Date(o.createdAt + 6 * 3600_000).toISOString().slice(0, 16).replace('T', ' ');
-      lines.push([o.orderNo, date, o.name, o.phone, o.address, o.qty, items, o.total, o.status, o.note].map(esc).join(','));
+      lines.push(
+        [o.orderNo, date, o.name, o.phone, o.address, o.qty, ...perItem, items, o.subtotal, o.delivery, o.total,
+          statusInfo(o.status).label, o.note, o.capi, r.source_url, r.ip].map(esc).join(','),
+      );
     }
-    return new Response('﻿' + lines.join('\r\n'), {
+    return new Response('\uFEFF' + lines.join('\r\n'), {
       headers: {
         'content-type': 'text/csv; charset=utf-8',
         'content-disposition': `attachment; filename="thread-house-orders-${new Date().toISOString().slice(0, 10)}.csv"`,

@@ -30,6 +30,8 @@ Then add your domain under Workers → thread-house → Settings → Domains & R
 
 To test CAPI, set `META_TEST_EVENT_CODE` (`npx wrangler secret put META_TEST_EVENT_CODE`) to the code from Events Manager → Test events. Delete it afterwards. If a Purchase event fails, the admin panel shows the CAPI error under that order.
 
+Admin CSV export: "সব অর্ডার এক্সপোর্ট" downloads every order with full details (each piece's colour and size, prices, status, note, page URL); "এই তালিকা এক্সপোর্ট" downloads only the current tab/search.
+
 ## Local development
 
 ```bash

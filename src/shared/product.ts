@@ -8,6 +8,7 @@ export const PRODUCT = {
   id: 'sweatshirt',
   name: 'প্রিমিয়াম সোয়েটশার্ট',
   tagline: 'নরম, আরামদায়ক ও স্টাইলিশ — প্রতিদিনের জন্য পারফেক্ট',
+  gsm: '২৮০+ GSM',
 };
 
 export type Color = { id: string; name: string; hex: string; border?: boolean };

@@ -172,14 +172,25 @@ function Orders({ onLogout }: { onLogout: () => void }) {
     setToast('ডিলিট হয়েছে');
   };
 
-  const exportCsv = async () => {
-    const res = await fetch(`/api/admin/export?${params()}`, { headers: { authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` } });
-    const url = URL.createObjectURL(await res.blob());
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `thread-house-orders-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const [exporting, setExporting] = useState(false);
+  const exportCsv = async (all: boolean) => {
+    setExporting(true);
+    try {
+      const qs = all ? 'all=1' : params();
+      const res = await fetch(`/api/admin/export?${qs}`, { headers: { authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` } });
+      if (!res.ok) throw new Error();
+      const url = URL.createObjectURL(await res.blob());
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `thread-house-${all ? 'all-orders' : 'orders'}-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setToast('CSV ডাউনলোড হয়েছে');
+    } catch {
+      setToast('এক্সপোর্ট করা যায়নি');
+    } finally {
+      setExporting(false);
+    }
   };
 
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
@@ -194,9 +205,6 @@ function Orders({ onLogout }: { onLogout: () => void }) {
           <IconButton onClick={() => load()} aria-label="রিফ্রেশ" disabled={loading}>
             <RefreshIcon />
           </IconButton>
-          <IconButton onClick={exportCsv} aria-label="CSV ডাউনলোড">
-            <DownloadIcon />
-          </IconButton>
           <IconButton onClick={onLogout} aria-label="লগআউট">
             <LogoutIcon />
           </IconButton>
@@ -209,6 +217,15 @@ function Orders({ onLogout }: { onLogout: () => void }) {
           <Stat label="আজকের বিক্রি" value={taka(stats?.todaySales ?? 0)} />
           <Stat label="আজকের পিস" value={bnNumber(stats?.todayPieces ?? 0)} />
           <Stat label="মোট অর্ডার" value={bnNumber(stats?.allOrders ?? 0)} />
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 1, mt: 1.5, flexWrap: 'wrap' }}>
+          <Button variant="contained" startIcon={<DownloadIcon />} disabled={exporting} onClick={() => exportCsv(true)}>
+            সব অর্ডার এক্সপোর্ট (CSV)
+          </Button>
+          <Button variant="outlined" startIcon={<DownloadIcon />} disabled={exporting} onClick={() => exportCsv(false)}>
+            এই তালিকা এক্সপোর্ট
+          </Button>
         </Box>
 
         <Tabs value={status} onChange={(_, v) => setStatus(v)} variant="scrollable" scrollButtons={false} sx={{ mt: 2, borderBottom: 1, borderColor: 'divider' }}>
